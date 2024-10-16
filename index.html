@@ -6,7 +6,7 @@
     <meta name="author" content="Myles Reid">
     <meta name="description" content="Page elements">
     <meta name="keywords" content="html, CSS, web, seo, web development">
-    <title>******CHANGE ME*******</title>
+    <title>System Status</title>
     <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,9 +16,34 @@
     <link rel="stylesheet" media="all" href="./assets/css/style.css">
     <script src="./assets/js/index.js" defer></script>
   </head>
-  <body>
-    <main>
-
-    </main>
+  <body class="container">
+    <div class="flex center">
+      <main class="flex flex-column flex-between">
+        <div class="system box">
+          <h2>System</h2>
+          <div class="info">
+            <p class="os"></p>
+            <p class="lang"></p>
+            <p class="browser"></p>
+          </div>
+        </div>
+        <div class="window box">
+          <h2>Window</h2>
+          <div class="info">
+            <p class="height"></p>
+            <p class="width"></p>
+            <p class="orientation"></p>
+          </div>
+        </div>
+        <div class="battery box">
+          <h2>Battery</h2>
+          <div class="info">
+            <p class="level">Level: Unavailable</p>
+            <p class="status">Status: Unavailable</p>
+          </div>
+        </div>
+        <div class="wifi"><p class="wifi-status"></p></div>
+      </main>
+    </div>
   </body>
 </html>
