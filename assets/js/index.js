@@ -3,7 +3,7 @@
 function select(selector, scope = document) {
   return scope.querySelector(selector);
 }
-//              what,  where,   action
+
 function listen(event, selector, callback) {
   return selector.addEventListener(event, callback);
 }
@@ -18,11 +18,60 @@ const batteryLevel = select('.level');
 const batteryStatus = select('.status');
 const wifiStatus = select('.wifi-status');
 const wifi = select('#wifi');
+const userAgentString = navigator.userAgent;
 
-// System Info and Browser
-function myOs() {
-  os.innerText = `OS: ${navigator.platform}`;
+// OS verification
+function windows(agent) {
+  return agent.includes('Win');
 }
+
+function mac(agent) {
+  return agent.includes('Mac');
+}
+
+function linux(agent) {
+  return agent.includes('Linux');
+}
+
+function android(agent) {
+  return /Android/.test(agent);
+}
+
+function ios(agent) {
+  return /iPhone|iPad|iPod/.test(agent)
+}
+
+function myOs() {
+  let myOs = 'Unknown OS';
+
+  switch(true) {
+    case windows(userAgentString):
+      myOs = 'Windows';
+      break;
+    
+    case mac(userAgentString):
+      myOs = 'MacOs';
+      break;
+    
+    case linux(userAgentString):
+      myOs = 'Linux';
+      break;
+
+    case android(userAgentString):
+      myOs = 'Android';
+      break;
+    
+    case ios(userAgentString):
+      myOs = 'iOS';
+      break;
+  }
+
+  os.innerText = `OS: ${myOs}`;
+}
+
+// function myOs() {
+//   os.innerText = `OS: ${navigator.platform}`;
+// }
 
 function myLanguage() {
   language.innerText = `Language: ${navigator.language}`;
@@ -30,64 +79,70 @@ function myLanguage() {
 
 
 //Browser validation and verification
-let userAgentString = navigator.userAgent;
+
+//storing userAgent in a string - easier access
+
 
 
 // functions to check if the string contains the keywords for each browser
 function chrome(agent) {
-  if (agent.includes('Chrome') && !agent.includes('Chromium') && 
-  !agent.includes('OPR') && !agent.includes('Edg')) {
-    return true;
-  } return false;
+  return (agent.includes('Chrome') && !agent.includes('Chromium') && 
+  !agent.includes('OPR') && !agent.includes('Edg'))
 };
 
 function safari(agent) {
-  if (agent.includes('Safari') && !agent.includes('Chrome')) {
-    return true;
-  } return false;
+return (agent.includes('Safari') && !agent.includes('Chrome'))
 };
 
 function firefox(agent) {
-  if (agent.includes('Firefox')) {
-    return true;
-  } return false;
+  return (agent.includes('Firefox'))
 };
 
 function internetExplorer(agent) {
-  if (agent.includes('MSIE') || agent.includes('Trident')) {
-    return true;
-  } return false;
+  return (agent.includes('MSIE') || agent.includes('Trident'))
 };
 
 function opera(agent) {
-  if (agent.includes('OPR') || agent.includes('Opera')) {
-    return true;
-  } return false;
+  return (agent.includes('OPR') || agent.includes('Opera'))
 };
 
 function edge(agent) {
-  if (agent.includes('Edg')) {
-    return true;
-  } return false;
+  return (agent.includes('Edg'))
 }
 
-
+// Displaying the correct browser
 function getBrowser() {
-  if (chrome(userAgentString)) {
-    browser.innerText = 'Browser: Chrome';
-  } else if (safari(userAgentString)) {
-    browser.innerText = 'Browser: Safari';
-  } else if (firefox(userAgentString)) {
-    browser.innerText = 'Browser: Firefox';
-  } else if (internetExplorer(userAgentString)) {
-    browser.innerText = 'Browser: Internet Explorer';
-  } else if (opera(userAgentString)) {
-    browser.innerText = 'Browser: Opera';
-  } else if (edge(userAgentString)) {
-    browser.innerText = 'Browser: Microsoft Edge';
-  } else {
-    browser.innerText = 'Unrecognized Browser'
+
+  let browserType = 'Unrecognized Browser';
+
+  switch(true) {
+    case chrome(userAgentString):
+      browserType = 'Chrome';
+      break;
+
+    case safari(userAgentString):
+      browserType = 'Safari';
+      break;
+
+    case firefox(userAgentString):
+      browserType = 'Firefox';
+      break;
+
+    case internetExplorer(userAgentString):
+      browserType = 'Internet Explorer';
+      break;
+    
+    case opera(userAgentString):
+      browserType = 'Opera';
+      break;
+
+    case edge(userAgentString):
+      browserType = 'Edge';
+      break;
   }
+
+  browser.innerText = `Browser: ${browserType}`;
+
 }
 
 
@@ -109,6 +164,7 @@ function battery() {
   
   // Verifying that the browser supports this API
   if ('getBattery' in navigator) {
+
     //finding the battery information. everything is required to be in this function
     navigator.getBattery().then(function(battery) {
 
@@ -125,6 +181,7 @@ function battery() {
     });
   }
 }
+
 
 // WIFI connections
 function wifiOnline() {
