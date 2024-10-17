@@ -17,6 +17,7 @@ const pageOrientation = select('.orientation');
 const batteryLevel = select('.level');
 const batteryStatus = select('.status');
 const wifiStatus = select('.wifi-status');
+const wifi = select('#wifi');
 
 // System Info and Browser
 function myOs() {
@@ -31,6 +32,8 @@ function myLanguage() {
 //Browser validation and verification
 let userAgentString = navigator.userAgent;
 
+
+// functions to check if the string contains the keywords for each browser
 function chrome(agent) {
   if (agent.includes('Chrome') && !agent.includes('Chromium') && 
   !agent.includes('OPR') && !agent.includes('Edg')) {
@@ -69,7 +72,6 @@ function edge(agent) {
 }
 
 
-
 function getBrowser() {
   if (chrome(userAgentString)) {
     browser.innerText = 'Browser: Chrome';
@@ -89,16 +91,6 @@ function getBrowser() {
 }
 
 
-listen('load', window, () => {
-  myOs();
-  myLanguage();
-  getBrowser();
-});
-
-
-
-
-
 // WINDOW HEIGHT/WIDTH
 function readWindow() {
   pageWidth.innerText = `Width: ${window.innerWidth}px`;
@@ -112,11 +104,71 @@ function readWindow() {
 }
 
 
+// Battery Status
+function battery() {
+  
+  // Verifying that the browser supports this API
+  if ('getBattery' in navigator) {
+    //finding the battery information. everything is required to be in this function
+    navigator.getBattery().then(function(battery) {
+
+      function updateInfo() {
+        batteryLevel.innerText = `Level: ${battery.level * 100}%`;
+        batteryStatus.innerText = `Status: ${battery.charging ? 'Charging' : 'Idle'}`;
+      }
+      
+      updateInfo();
+
+      listen('chargingchange', battery, updateInfo);
+
+      listen('levelchange', battery, updateInfo);
+    });
+  }
+}
+
+// WIFI connections
+function wifiOnline() {
+    wifiStatus.innerText = 'Connected';
+    wifi.classList.remove('offline');
+    wifi.classList.add('online');
+  }
+
+function wifiOffline() {
+    wifiStatus.innerText = 'Offline';
+    wifi.classList.remove('online');
+    wifi.classList.add('offline');
+  }
+
+function isOnline() {
+  if (navigator.onLine) {
+    wifiOnline();
+  } else {
+    wifiOffline();
+  }
+}
+
+
+// Listeners
+
 listen('load', window, () => {
   readWindow();
+  battery();
+  isOnline();
+  myOs();
+  myLanguage();
+  getBrowser();
 });
 
 listen('resize', window, () => {
   readWindow();
 });
+
+listen('online', window, () => {
+  wifiOnline();
+});
+
+listen('offline', window, () => {
+  wifiOffline();
+});
+
 

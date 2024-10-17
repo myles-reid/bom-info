@@ -10,10 +10,17 @@ body {
   background-color: var(--app-color-dark-bg);
 }
 
+
+.wrapper {
+  height: 100svh;
+}
+
 main {
   color: #fff;
   height: 100svh;
+  max-height: 750px;
   padding-top: 40px;
+
 }
 
 .box {
